@@ -1,0 +1,27 @@
+[project]
+name = "members_files"
+version = "0.0.0"
+description = "Clean up Member's files"
+readme = "README.md"
+requires-python = ">=3.13.3"
+
+# include = [
+#     "HISTORY.md",
+#     "src/directors_rota/images/*.png",
+#     "src/directors_rota/images/*.ico",
+#     ]
+
+dependencies = [
+]
+
+[dependency-groups]
+dev = [
+    'pytest',
+    "pytest-mock>=0.0.3",
+#    "freezegun>=1.5.3",
+#   "icecream>=2.1.4",
+]
+
+[build-system]
+requires = ['uv-build']
+build-backend = 'uv_build'
