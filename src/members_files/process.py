@@ -65,8 +65,6 @@ class Compare():
             bbo_names = f_names.read().strip('\n').split('\n')
 
         for item in bbo_names:
-            if not bbo_names:
-                continue
 
             record = item.split(',')
             record = [field.strip() for field in record]
