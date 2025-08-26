@@ -16,7 +16,7 @@ class Member():
 class Compare():
     def __init__(self, parent: object) -> None:
         self.parent = parent
-        self.missing_from_allowed = {}
+        self.missing_from_include = {}
         self.missing_from_bbo = {}
         self.members_ebu = {}
         self.members_bbo = {}
@@ -39,7 +39,7 @@ class Compare():
             )
             self.members_ebu[member.ebu] = member
 
-        allowed_list = self._get_allowed_list(
+        include_list = self._get_include_list(
             self.parent.bbo_include_file.get())
 
         self.members_bbo = self._get_bbo_names(
@@ -47,12 +47,12 @@ class Compare():
 
         for ebu, member in self.members_ebu.items():
             if member.bbo and member.status == 'Member':
-                if member.bbo not in allowed_list:
-                    self.missing_from_allowed[ebu] = self.members_ebu[ebu]
+                if member.bbo not in include_list:
+                    self.missing_from_include[ebu] = self.members_ebu[ebu]
                 if member.ebu not in self.members_bbo:
                     self.missing_from_bbo[ebu] = self.members_ebu[ebu]
 
-    def _get_allowed_list(self, path: str) -> list:
+    def _get_include_list(self, path: str) -> list:
         with open(path, 'r', encoding='utf8') as f_include:
             data = f_include.read().split('\n')
             return [name.lower() for name in data]

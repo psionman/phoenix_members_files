@@ -4,7 +4,7 @@ from tkinter import ttk, messagebox
 from pathlib import Path
 
 from psiutils.constants import PAD
-from psiutils.buttons import ButtonFrame, Button, IconButton
+from psiutils.buttons import ButtonFrame, IconButton
 from psiutils.utilities import window_resize
 from psiutils.treeview import sort_treeview
 from psiutils.widgets import separator_frame
@@ -30,7 +30,7 @@ class ReportFrame():
         self.parent = parent
         self.config = read_config()
         self.comparison = Compare(self.parent)
-        self.allowed_tree = None
+        self.include_tree = None
         self.names_tree = None
         duplicates = ''
         if self.comparison.duplicates:
@@ -78,15 +78,15 @@ class ReportFrame():
         label.grid(row=row, column=0, sticky=tk.W, padx=PAD, pady=PAD)
 
         row += 1
-        label = ttk.Label(frame, text='Missing from allowed')
+        label = ttk.Label(frame, text='Missing from include')
         label.grid(row=row, column=0, sticky=tk.W, padx=PAD, pady=PAD)
 
         row += 1
-        self.allowed_tree = self._get_allowed_tree(frame)
-        self.allowed_tree.grid(row=row, column=0, sticky=tk.NSEW)
-        self._populate_allowed_tree()
+        self.include_tree = self._get_include_tree(frame)
+        self.include_tree.grid(row=row, column=0, sticky=tk.NSEW)
+        self._populate_include_tree()
 
-        button = IconButton(frame, text.COPY, 'copy_docs', self._copy_allowed)
+        button = IconButton(frame, text.COPY, 'copy_docs', self._copy_include)
         button.grid(row=row, column=1, padx=PAD, pady=PAD, sticky=tk.N)
 
         row += 1
@@ -116,7 +116,7 @@ class ReportFrame():
         frame.enable(False)
         return frame
 
-    def _get_allowed_tree(self, master: tk.Frame) -> ttk.Treeview:
+    def _get_include_tree(self, master: tk.Frame) -> ttk.Treeview:
         """Return  a tree widget."""
         tree = ttk.Treeview(
             master,
@@ -139,31 +139,31 @@ class ReportFrame():
         # tree.column(<'right-align-column-name'>, stretch=0, anchor=tk.E)
         return tree
 
-    def _populate_allowed_tree(self) -> None:
-        self.allowed_tree.delete(*self.allowed_tree.get_children())
-        for item in self.comparison.missing_from_allowed.values():
+    def _populate_include_tree(self) -> None:
+        self.include_tree.delete(*self.include_tree.get_children())
+        for item in self.comparison.missing_from_include.values():
             values = (
                 item.ebu,
                 f'{item.first_name} {item.last_name}',
                 item.bbo)
-            self.allowed_tree.insert('', 'end', values=values)
+            self.include_tree.insert('', 'end', values=values)
 
-    def _copy_allowed(self, *args):
+    def _copy_include(self, *args):
         dlg = messagebox.askyesno(
             '',
-            'Overwrite Allowed file?'
+            'Overwrite include file?'
         )
         if not dlg:
             return
 
-        allowed = [member.bbo
-                   for member in self.comparison.members.values()
+        include = [member.bbo
+                   for member in self.comparison.members_bbo.values()
                    if member.bbo and member.status == 'Member']
         path = self.parent.bbo_include_file.get()
-        with open(path, 'w', encoding='utf8') as f_allowed:
-            f_allowed.write('\n'.join(sorted(allowed)))
+        with open(path, 'w', encoding='utf8') as f_include:
+            f_include.write('\n'.join(sorted(include)))
         self.comparison = Compare(self.parent)
-        self._populate_allowed_tree()
+        self._populate_include_tree()
 
     def _get_names_tree(self, master: tk.Frame) -> ttk.Treeview:
         """Return  a tree widget."""
@@ -216,8 +216,8 @@ class ReportFrame():
                  for member in combined.values()]
 
         path = self.parent.bbo_names_file.get()
-        with open(path, 'w', encoding='utf8') as f_allowed:
-            f_allowed.write('\n'.join(sorted(names)))
+        with open(path, 'w', encoding='utf8') as f_include:
+            f_include.write('\n'.join(sorted(names)))
         self.comparison = Compare(self.parent)
         self._populate_names_tree()
 
