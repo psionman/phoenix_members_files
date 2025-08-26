@@ -10,9 +10,9 @@ from psiutils.treeview import sort_treeview
 from psiutils.widgets import separator_frame
 from psiutils import text
 
-from constants import APP_TITLE, DEFAULT_GEOMETRY
-from config import read_config
-from process import Compare
+from members_files.constants import APP_TITLE, DEFAULT_GEOMETRY
+from members_files.config import read_config
+from members_files.process import Compare
 # import text
 
 FRAME_TITLE = f'{APP_TITLE} - Reports'
@@ -32,6 +32,9 @@ class ReportFrame():
         self.comparison = Compare(self.parent)
         self.include_tree = None
         self.names_tree = None
+        self.copy_include_button = None
+        self.copy_bbo_button = None
+
         duplicates = ''
         if self.comparison.duplicates:
             bbo_file = self.parent.bbo_names_file.get()
@@ -43,6 +46,7 @@ class ReportFrame():
         self.show()
 
     def show(self) -> None:
+        # pylint: disable=no-member)
         root = self.root
         try:
             root.geometry(self.config.geometry[Path(__file__).stem])
@@ -84,10 +88,14 @@ class ReportFrame():
         row += 1
         self.include_tree = self._get_include_tree(frame)
         self.include_tree.grid(row=row, column=0, sticky=tk.NSEW)
-        self._populate_include_tree()
 
-        button = IconButton(frame, text.COPY, 'copy_docs', self._copy_include)
-        button.grid(row=row, column=1, padx=PAD, pady=PAD, sticky=tk.N)
+        self.copy_include_button = IconButton(
+            frame, text.COPY, 'copy_docs', self._copy_include, dimmable=True)
+        self.copy_include_button.grid(
+            row=row, column=1, padx=PAD, pady=PAD, sticky=tk.N)
+
+        self.copy_include_button.disable()
+        self._populate_include_tree()
 
         row += 1
         separator = separator_frame(frame, '')
@@ -101,10 +109,13 @@ class ReportFrame():
         row += 1
         self.names_tree = self._get_names_tree(frame)
         self.names_tree.grid(row=row, column=0, sticky=tk.NSEW)
-        self._populate_names_tree()
 
-        button = IconButton(frame, text.COPY, 'copy_docs', self._copy_names)
-        button.grid(row=row, column=1, padx=PAD, pady=PAD, sticky=tk.N)
+        self.copy_bbo_button = IconButton(
+            frame, text.COPY, 'copy_docs', self._copy_names, dimmable=True)
+        self.copy_bbo_button.grid(
+            row=row, column=1, padx=PAD, pady=PAD, sticky=tk.N)
+        self.copy_bbo_button.disable()
+        self._populate_names_tree()
         return frame
 
     def _button_frame(self, master: tk.Frame) -> tk.Frame:
@@ -141,6 +152,8 @@ class ReportFrame():
 
     def _populate_include_tree(self) -> None:
         self.include_tree.delete(*self.include_tree.get_children())
+        if len(self.comparison.missing_from_include) > 0:
+            self.copy_include_button.enable()
         for item in self.comparison.missing_from_include.values():
             values = (
                 item.ebu,
@@ -195,6 +208,8 @@ class ReportFrame():
 
     def _populate_names_tree(self) -> None:
         self.names_tree.delete(*self.names_tree.get_children())
+        if len(self.comparison.missing_from_bbo) > 0:
+            self.copy_bbo_button.enable()
         for item in self.comparison.missing_from_bbo.values():
             values = (
                 item.ebu,
