@@ -95,7 +95,7 @@ class ReportFrame():
                        sticky=tk.EW, padx=PAD)
 
         row += 1
-        label = ttk.Label(frame, text='Missing from names')
+        label = ttk.Label(frame, text='Missing from bbo_names')
         label.grid(row=row, column=0, sticky=tk.W, padx=PAD, pady=PAD)
 
         row += 1
@@ -156,9 +156,14 @@ class ReportFrame():
         if not dlg:
             return
 
-        include = [member.bbo
-                   for member in self.comparison.members_bbo.values()
-                   if member.bbo and member.status == 'Member']
+        include = []
+        for member in self.comparison.members_bbo.values():
+            status = ''
+            if member.ebu in self.comparison.members_ebu:
+                status = self.comparison.members_ebu[member.ebu].status
+            if member.bbo and status == 'Member':
+                include.append(member.bbo)
+
         path = self.parent.bbo_include_file.get()
         with open(path, 'w', encoding='utf8') as f_include:
             f_include.write('\n'.join(sorted(include)))
@@ -225,4 +230,4 @@ class ReportFrame():
         ...
 
     def _dismiss(self, *args) -> None:
-        self.root.destroy()
+        self.parent.root.destroy()

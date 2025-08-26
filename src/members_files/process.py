@@ -1,7 +1,7 @@
 """Compare BBO membership files."""
 from dataclasses import dataclass
 
-from csv_utils import get_dict_from_csv_file
+from members_files.csv_utils import get_dict_from_csv_file
 
 
 @dataclass
@@ -27,6 +27,7 @@ class Compare():
     def _compare(self) -> None:
         (members, members_fields) = get_dict_from_csv_file(
             self.parent.member_file.get(), 'EBU')
+        del members_fields
         for item in members.values():
             if item['EBU'] == 'EBU':
                 continue
@@ -37,6 +38,7 @@ class Compare():
                 item['BBOUSERNAME'].lower(),
                 item['STATUS'],
             )
+
             self.members_ebu[member.ebu] = member
 
         include_list = self._get_include_list(
