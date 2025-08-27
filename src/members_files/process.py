@@ -18,8 +18,8 @@ class Compare():
         self.parent = parent
         self.missing_from_include = {}
         self.missing_from_bbo = {}
-        self.members_ebu = {}
-        self.members_bbo = {}
+        self.members_ebu = {}  # dict of members from members' database
+        self.members_bbo = {}  # fist of members from bb_names file
         self.bbo_names = []
         self.duplicates = []
         self._compare()

@@ -6,16 +6,16 @@ from pathlib import Path
 
 from psiutils.constants import (PAD, Pad, CSV_FILE_TYPES, DOWNLOADS_DIR,
     TXT_FILE_TYPES)
-from psiutils.buttons import ButtonFrame, Button, IconButton
+from psiutils.buttons import ButtonFrame, IconButton
 from psiutils.utilities import window_resize
 
-from constants import APP_TITLE
-from config import read_config
-import text
-from data_files import DataFile
+from members_files.constants import APP_TITLE
+from members_files.config import read_config
+import members_files.text as txt
+from members_files.data_files import DataFile
 
-from main_menu import MainMenu
-from forms.frm_report import ReportFrame
+from members_files.main_menu import MainMenu
+from members_files.forms.frm_report import ReportFrame
 
 FRAME_TITLE = APP_TITLE
 
@@ -30,25 +30,22 @@ class MainFrame():
         member_file = ''
         bbo_include_file = ''
         bbo_names_file = ''
-        bbo_att_file =''
         if 'member_file' in self.data_file.content:
             member_file = self.data_file.content['member_file']
         if 'bbo_include_file' in self.data_file.content:
             bbo_include_file = self.data_file.content['bbo_include_file']
         if 'bbo_names_file' in self.data_file.content:
             bbo_names_file = self.data_file.content['bbo_names_file']
-        if 'bbo_att_file' in self.data_file.content:
-            bbo_att_file = self.data_file.content['bbo_att_file']
 
         # tk variables
         self.member_file = tk.StringVar(value=member_file)
         self.bbo_include_file = tk.StringVar(value=bbo_include_file)
         self.bbo_names_file = tk.StringVar(value=bbo_names_file)
-        self.bbo_att_file = tk.StringVar(value=bbo_att_file)
 
-        self.show()
+        self._show()
 
-    def show(self):
+    def _show(self):
+        # pylint: disable=no-member)
         root = self.root
         root.geometry(self.config.geometry[Path(__file__).stem])
         root.title(FRAME_TITLE)
@@ -68,7 +65,7 @@ class MainFrame():
         main_frame.grid(row=0, column=0, sticky=tk.NSEW, padx=PAD, pady=PAD)
 
         self.button_frame = self._button_frame(root)
-        self.button_frame.grid(row=8, column=0, columnspan=9,
+        self.button_frame.grid(row=1, column=0, columnspan=9,
                                sticky=tk.EW, padx=PAD, pady=PAD)
 
         sizegrip = ttk.Sizegrip(root)
@@ -76,7 +73,6 @@ class MainFrame():
 
     def _main_frame(self, master: tk.Frame) -> ttk.Frame:
         frame = ttk.Frame(master)
-        # frame.rowconfigure(0, weight=1)
         frame.columnconfigure(1, weight=1)
 
         row = 0
@@ -86,7 +82,7 @@ class MainFrame():
         entry = ttk.Entry(frame, textvariable=self.member_file)
         entry.grid(row=row, column=1, sticky=tk.EW)
 
-        button = IconButton(frame, text.OPEN, 'open', self._get_member_file)
+        button = IconButton(frame, txt.OPEN, 'open', self._get_member_file)
         button.grid(row=row, column=2, padx=PAD, pady=Pad.S)
 
         row += 1
@@ -97,7 +93,7 @@ class MainFrame():
         entry.grid(row=row, column=1, sticky=tk.EW)
 
         button = IconButton(
-            frame, text.OPEN, 'open', self._get_bbo_include_file)
+            frame, txt.OPEN, 'open', self._get_bbo_include_file)
         button.grid(row=row, column=2, padx=PAD, pady=Pad.S)
 
         row += 1
@@ -108,18 +104,7 @@ class MainFrame():
         entry.grid(row=row, column=1, sticky=tk.EW)
 
         button = IconButton(
-            frame, text.OPEN, 'open', self._get_bbo_names_file)
-        button.grid(row=row, column=2, padx=PAD, pady=Pad.S)
-
-        row += 1
-        label = ttk.Label(frame, text='BBO attendance file')
-        label.grid(row=row, column=0, sticky=tk.E, padx=PAD, pady=PAD)
-
-        entry = ttk.Entry(frame, textvariable=self.bbo_att_file)
-        entry.grid(row=row, column=1, sticky=tk.EW)
-
-        button = IconButton(
-            frame, text.OPEN, 'open', self._get_bbo_att_file)
+            frame, txt.OPEN, 'open', self._get_bbo_names_file)
         button.grid(row=row, column=2, padx=PAD, pady=Pad.S)
 
         return frame
@@ -176,21 +161,6 @@ class MainFrame():
         if bbo_names_file:
             self.bbo_names_file.set(bbo_names_file)
             self.data_file.content['bbo_names_file'] = bbo_names_file
-            self.data_file.write()
-
-    def _get_bbo_att_file(self, *args) -> None:
-        initialfile = self.bbo_att_file.get()
-        initialdir = DOWNLOADS_DIR
-        if initialfile:
-            initialdir = Path(initialfile).parent
-        bbo_att_file = filedialog.askopenfilename(
-            initialdir=initialdir,
-            initialfile=initialfile,
-            filetypes=CSV_FILE_TYPES,
-        )
-        if bbo_att_file:
-            self.bbo_att_file.set(bbo_att_file)
-            self.data_file.content['bbo_att_file'] = bbo_att_file
             self.data_file.write()
 
     def _process(self, *args) -> None:
