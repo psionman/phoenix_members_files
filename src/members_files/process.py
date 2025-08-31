@@ -6,6 +6,7 @@ from members_files.csv_utils import get_dict_from_csv_file
 
 @dataclass
 class Member():
+    """Represents a member."""
     ebu: str
     first_name: str
     last_name: str

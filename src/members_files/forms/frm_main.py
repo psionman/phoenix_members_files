@@ -5,7 +5,7 @@ from tkinter import ttk, filedialog
 from pathlib import Path
 
 from psiutils.constants import (PAD, Pad, CSV_FILE_TYPES, DOWNLOADS_DIR,
-    TXT_FILE_TYPES)
+                                TXT_FILE_TYPES)
 from psiutils.buttons import ButtonFrame, IconButton
 from psiutils.utilities import window_resize
 
@@ -21,7 +21,22 @@ FRAME_TITLE = APP_TITLE
 
 
 class MainFrame():
+    """
+    Represents the main frame of the application,
+    handling form initialization and user interactions.
+
+    """
     def __init__(self, root: tk.Tk) -> None:
+        """
+        Initializes the form with the provided root window,
+        reads configuration, and sets up data files.
+
+        Args:
+            root: The root window of the form.
+
+        Returns:
+            None
+        """
         self.root = root
         self.config = read_config()
         self.data_file = DataFile()
@@ -82,7 +97,8 @@ class MainFrame():
         entry = ttk.Entry(frame, textvariable=self.member_file)
         entry.grid(row=row, column=1, sticky=tk.EW)
 
-        button = IconButton(frame, txt.OPEN, 'open', self._get_member_file)
+        button = IconButton(
+            frame, txt.OPEN, 'open', False, self._get_member_file)
         button.grid(row=row, column=2, padx=PAD, pady=Pad.S)
 
         row += 1
@@ -93,7 +109,7 @@ class MainFrame():
         entry.grid(row=row, column=1, sticky=tk.EW)
 
         button = IconButton(
-            frame, txt.OPEN, 'open', self._get_bbo_include_file)
+            frame, txt.OPEN, 'open', False, self._get_bbo_include_file)
         button.grid(row=row, column=2, padx=PAD, pady=Pad.S)
 
         row += 1
@@ -104,7 +120,7 @@ class MainFrame():
         entry.grid(row=row, column=1, sticky=tk.EW)
 
         button = IconButton(
-            frame, txt.OPEN, 'open', self._get_bbo_names_file)
+            frame, txt.OPEN, 'open', False, self._get_bbo_names_file)
         button.grid(row=row, column=2, padx=PAD, pady=Pad.S)
 
         return frame

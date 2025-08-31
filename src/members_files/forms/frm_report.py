@@ -90,7 +90,7 @@ class ReportFrame():
         self.include_tree.grid(row=row, column=0, sticky=tk.NSEW)
 
         self.copy_include_button = IconButton(
-            frame, text.COPY, 'copy_docs', self._copy_include, dimmable=True)
+            frame, text.COPY, 'copy_docs', True, self._copy_include)
         self.copy_include_button.grid(
             row=row, column=1, padx=PAD, pady=PAD, sticky=tk.N)
 
@@ -111,7 +111,7 @@ class ReportFrame():
         self.names_tree.grid(row=row, column=0, sticky=tk.NSEW)
 
         self.copy_bbo_button = IconButton(
-            frame, text.COPY, 'copy_docs', self._copy_names, dimmable=True)
+            frame, text.COPY, 'copy_docs', True, self._copy_names)
         self.copy_bbo_button.grid(
             row=row, column=1, padx=PAD, pady=PAD, sticky=tk.N)
         self.copy_bbo_button.disable()

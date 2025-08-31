@@ -121,9 +121,8 @@ class ConfigFrame():
         entry = ttk.Entry(frame, textvariable=self.data_directory)
         entry.grid(row=row, column=1, sticky=tk.EW)
 
-        # button = ttk.Button(
-        #     frame, text=text.ELLIPSIS, command=self._get_data_directory)
-        button = IconButton(frame, text.OPEN, 'open', self._get_data_directory)
+        button = IconButton(
+            frame, text.OPEN, 'open', False, self._get_data_directory)
         button.grid(row=row, column=2, padx=Pad.W)
 
         return frame
