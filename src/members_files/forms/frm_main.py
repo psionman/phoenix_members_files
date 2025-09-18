@@ -98,7 +98,7 @@ class MainFrame():
         entry.grid(row=row, column=1, sticky=tk.EW)
 
         button = IconButton(
-            frame, txt.OPEN, 'open', False, self._get_member_file)
+            frame, txt.OPEN, 'open', self._get_member_file)
         button.grid(row=row, column=2, padx=PAD, pady=Pad.S)
 
         row += 1
@@ -109,7 +109,7 @@ class MainFrame():
         entry.grid(row=row, column=1, sticky=tk.EW)
 
         button = IconButton(
-            frame, txt.OPEN, 'open', False, self._get_bbo_include_file)
+            frame, txt.OPEN, 'open',  self._get_bbo_include_file)
         button.grid(row=row, column=2, padx=PAD, pady=Pad.S)
 
         row += 1
@@ -120,7 +120,7 @@ class MainFrame():
         entry.grid(row=row, column=1, sticky=tk.EW)
 
         button = IconButton(
-            frame, txt.OPEN, 'open', False, self._get_bbo_names_file)
+            frame, txt.OPEN, 'open', self._get_bbo_names_file)
         button.grid(row=row, column=2, padx=PAD, pady=Pad.S)
 
         return frame
@@ -128,8 +128,8 @@ class MainFrame():
     def _button_frame(self, master: tk.Frame) -> tk.Frame:
         frame = ButtonFrame(master, tk.HORIZONTAL)
         frame.buttons = [
-            frame.icon_button('report', False, self._process),
-            frame.icon_button('close', False, self._dismiss),
+            frame.icon_button('report', self._process),
+            frame.icon_button('close', self._dismiss),
         ]
         frame.enable(False)
         return frame

@@ -13,7 +13,6 @@ from psiutils import text
 from members_files.constants import APP_TITLE, DEFAULT_GEOMETRY
 from members_files.config import read_config
 from members_files.process import Compare
-# import text
 
 FRAME_TITLE = f'{APP_TITLE} - Reports'
 
@@ -90,7 +89,7 @@ class ReportFrame():
         self.include_tree.grid(row=row, column=0, sticky=tk.NSEW)
 
         self.copy_include_button = IconButton(
-            frame, text.COPY, 'copy_docs', True, self._copy_include)
+            frame, text.COPY, 'copy_docs', self._copy_include, True)
         self.copy_include_button.grid(
             row=row, column=1, padx=PAD, pady=PAD, sticky=tk.N)
 
@@ -111,7 +110,7 @@ class ReportFrame():
         self.names_tree.grid(row=row, column=0, sticky=tk.NSEW)
 
         self.copy_bbo_button = IconButton(
-            frame, text.COPY, 'copy_docs', True, self._copy_names)
+            frame, text.COPY, 'copy_docs', self._copy_names, True)
         self.copy_bbo_button.grid(
             row=row, column=1, padx=PAD, pady=PAD, sticky=tk.N)
         self.copy_bbo_button.disable()
@@ -122,7 +121,7 @@ class ReportFrame():
         frame = ButtonFrame(master, tk.HORIZONTAL)
         frame.buttons = [
             # frame.icon_button('build', True, self._process),
-            frame.icon_button('exit', False, self._dismiss),
+            frame.icon_button('exit', self._dismiss),
         ]
         frame.enable(False)
         return frame
@@ -135,8 +134,6 @@ class ReportFrame():
             height=15,
             show='headings',
             )
-        # tree.bind('<<TreeviewSelect>>', self._tree_clicked)
-        # tree.bind('<Button-3>', self._show_context_menu)
 
         col_list = tuple(col[0] for col in TREE_COLUMNS)
 

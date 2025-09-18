@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import ttk, filedialog
 from pathlib import Path
 
-from psiutils.buttons import ButtonFrame, Button, IconButton
+from psiutils.buttons import ButtonFrame, IconButton
 from psiutils.constants import PAD, Pad
 from psiutils.utilities import window_resize
 
@@ -122,7 +122,7 @@ class ConfigFrame():
         entry.grid(row=row, column=1, sticky=tk.EW)
 
         button = IconButton(
-            frame, text.OPEN, 'open', False, self._get_data_directory)
+            frame, text.OPEN, 'open', self._get_data_directory)
         button.grid(row=row, column=2, padx=Pad.W)
 
         return frame
@@ -146,8 +146,8 @@ class ConfigFrame():
         """
         frame = ButtonFrame(master, tk.HORIZONTAL)
         frame.buttons = [
-            frame.icon_button('save', True, self._save_config),
-            frame.icon_button('exit', False, self._dismiss),
+            frame.icon_button('save', self._save_config, True),
+            frame.icon_button('exit', self._dismiss),
         ]
         frame.enable(False)
         return frame
