@@ -72,7 +72,6 @@ class ReportFrame():
 
     def _main_frame(self, master: tk.Frame) -> ttk.Frame:
         frame = ttk.Frame(master)
-        # frame.rowconfigure(0, weight=1)
         frame.columnconfigure(0, weight=1)
 
         row = 0
@@ -120,7 +119,6 @@ class ReportFrame():
     def _button_frame(self, master: tk.Frame) -> tk.Frame:
         frame = ButtonFrame(master, tk.HORIZONTAL)
         frame.buttons = [
-            # frame.icon_button('build', True, self._process),
             frame.icon_button('exit', self._dismiss),
         ]
         frame.enable(False)
@@ -144,7 +142,6 @@ class ReportFrame():
                          command=lambda c=col_key:
                          sort_treeview(tree, c, False))
             tree.column(col_key, width=col_width, anchor=tk.W)
-        # tree.column(<'right-align-column-name'>, stretch=0, anchor=tk.E)
         return tree
 
     def _populate_include_tree(self) -> None:
@@ -188,8 +185,6 @@ class ReportFrame():
             height=15,
             show='headings',
             )
-        # tree.bind('<<TreeviewSelect>>', self._tree_clicked)
-        # tree.bind('<Button-3>', self._show_context_menu)
 
         col_list = tuple(col[0] for col in TREE_COLUMNS)
 
@@ -200,7 +195,6 @@ class ReportFrame():
                          command=lambda c=col_key:
                          sort_treeview(tree, c, False))
             tree.column(col_key, width=col_width, anchor=tk.W)
-        # tree.column(<'right-align-column-name'>, stretch=0, anchor=tk.E)
         return tree
 
     def _populate_names_tree(self) -> None:

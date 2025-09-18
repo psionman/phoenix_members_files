@@ -11,12 +11,13 @@ from psiutils.utilities import window_resize
 
 from members_files.constants import APP_TITLE
 from members_files.config import read_config
-import members_files.text as txt
+from members_files.text import Text
 from members_files.data_files import DataFile
 
 from members_files.main_menu import MainMenu
 from members_files.forms.frm_report import ReportFrame
 
+txt = Text()
 FRAME_TITLE = APP_TITLE
 
 

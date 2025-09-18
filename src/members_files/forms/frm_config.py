@@ -8,9 +8,9 @@ from psiutils.buttons import ButtonFrame, IconButton
 from psiutils.constants import PAD, Pad
 from psiutils.utilities import window_resize
 
-from constants import APP_TITLE
-from config import read_config, save_config
-import text
+from members_files.constants import APP_TITLE
+from members_files.config import read_config, save_config
+import members_files.text as text
 
 
 class ConfigFrame():
@@ -40,6 +40,7 @@ class ConfigFrame():
     """
 
     def __init__(self, parent: tk.Frame) -> None:
+        # pylint: disable=no-member)
         self.root = tk.Toplevel(parent.root)
         self.parent = parent
         self.config = read_config()
@@ -70,6 +71,7 @@ class ConfigFrame():
             - A button frame with Save and Exit buttons.
             - A sizegrip for resizing support.
         """
+        # pylint: disable=no-member)
         root = self.root
         root.geometry(self.config.geometry[Path(__file__).stem])
         root.transient(self.parent.root)
@@ -153,6 +155,7 @@ class ConfigFrame():
         return frame
 
     def _value_changed(self) -> bool:
+        # pylint: disable=no-member)
         """
         Determine whether any configuration value has changed.
 
